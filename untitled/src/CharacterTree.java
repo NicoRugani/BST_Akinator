@@ -72,8 +72,29 @@ public class CharacterTree {
                 String q =formatQuestion(current.text);
                 System.out.printf("Is your character %s? (y/n): ", q);
                 boolean answer = yes(in);
+                path.add(answer ? q: (" not " + q));
+                current = answer ? current.left : current.right;
+            }
+
+            //reached a leaf
+            System.out.printf("Are you thinking of %s? (y/n): ", current.text);
+            if(yes(in)){
+                System.out.println("Horray! I guessed correctly! Would you like to play again? (y/n): ");
+                again = yes(in);
+            }
+            else{
+                printPathMiss(path, current.text);
+                learnNewCharacter(in, current);
+                System.out.println("Darn! next time! Would you like to play again? (y/n): ");
+                again = yes(in);
             }
         }
+    }
+
+    private static String formatQuestion(String s){
+        String t = s.strip();
+        if (t.endsWith("?")) t = t.substring(0, t.length() - 1).trim();
+        return t;
     }
 
     private static boolean yes(Scanner in){
@@ -82,6 +103,73 @@ public class CharacterTree {
             if ( s.startsWith("y") ) return true;
             if ( s.startsWith("n") ) return false;
             System.out.println("Please answer y or n: ");
+        }
+    }
+
+    private static void printPathMiss(List<String> path, String leafName){
+        if(path.isEmpty()){
+            System.out.printf("I don't know any characters that are not %s.%n", leafName);
+            return;
+        }
+
+        String joined = String.join(", ", path);
+        System.out.printf("I don't know any %s characters that are not %s.%n", joined, leafName);
+    }
+
+    private void learnNewCharacter(Scanner in, Node leaf){
+        String oldName = leaf.text;
+        System.out.println("What character were you thinking of?: ");
+        String newName = readNonEmpty(in);
+    }
+
+
+    private static String readNonEmpty(Scanner in){
+        while(true){
+            String s = in.nextLine().strip();
+            if(!s.isEmpty()) return s;
+            System.out.print("Please enter something; ");
+        }
+    }
+
+    public void relabelAndSave(String path) throws IOException {
+        int [] counter = new int[]{0};
+
+        relabelInOrder(root, counter);
+
+        List<Node> breadthFirst = BreadthFirstList(root);
+        try(BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8))){
+            for(Node n : breadthFirst){
+                bw.write(n.id + ", " + n.text);
+                bw.newLine();
+            }
+        }
+    }
+
+    private void relabelInOrder(Node n, int[] counter){
+        if(n == null) return;
+        relabelInOrder(n.left, counter);
+        n.id = counter[0]++;
+        relabelInOrder(n.right, counter);
+    }
+
+    private List<Node> BreadthFirstList(Node root){
+        List<Node> out = new ArrayList<>();
+        if(root == null) return out;
+        ArrayDeque<Node> queue = new ArrayDeque<>();
+        queue.add(root);
+        while(!queue.isEmpty()){
+            Node n = queue.remove();
+            out.add(n);
+            if(n.left != null) queue.add(n.left);
+            if(n.right != null) queue.add(n.right);
+
+        }
+        return out;
+    }
+
+    public void printBreadthFirst(){
+        for(Node n : BreadthFirstList(root)){
+            System.out.println(n.id + " -> " + n.text + (n.isLeaf() ? " [Leaf]" : "[Q]"));
         }
     }
 
