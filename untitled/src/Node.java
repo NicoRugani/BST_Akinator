@@ -1,5 +1,4 @@
-import java.util.*;
-
+// Students: Nico Rugani, <Partner Name>
 public class Node {
     int id;
     String text;
@@ -7,19 +6,15 @@ public class Node {
 
     public Node(int id, String text) {
         this.id = id;
-        this.text = text.trim();
+        this.text = (text == null) ? "" : text.trim();
     }
 
-    boolean isLeaf(){
-        return left == null && right ==null;
+    boolean isLeaf() {
+        return left == null && right == null;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return id + ", " + text;
     }
-
 }
-
-
-

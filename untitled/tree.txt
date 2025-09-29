@@ -1,17 +1,19 @@
-7,real
-3,an athlete
-13,from a movie
-1,retired
-5,a singer
-11,a superhero
-15,from a video game
-0,Tom Brady
-2,Tommy Mellott
-4,Sabrina Carpenter
-6,Reese Pearsall
-9,a web shooter
-12,Indiana JOnes
-14,Arthur Morgan
-16,Michael Scott
-8,Spiderman
-10,Batman
+9, real
+3, an athlete
+15, from a movie
+1, retired
+7, a singer
+13, a superhero
+17, from a video game
+0, Tom Brady
+2, Tommy Mellott
+5, Is your character still alive
+8, Reese Pearsall
+11, a web shooter
+14, Indiana JOnes
+16, Arthur Morgan
+18, Michael Scott
+4, Elvis presly
+6, Sabrina Carpenter
+10, Spiderman
+12, Batman
